@@ -154,7 +154,6 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
     # Actual box counting with decreasing size
     counts = []
     for size in sizes:
-        print(size)
         counts.append(box_count(image_pos, size))
     # Calculate the dimension with linear regression
     coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)

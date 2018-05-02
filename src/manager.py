@@ -147,15 +147,14 @@ class Manager:
                     layerNode[layer].append(node)      
                     ID_count += 1
         timeEnd = time.time()
-        print("Node generation time usage: " + str(timeEnd - timeStart) + " seconds")
+        print("Node generation time used: " + str(timeEnd - timeStart) + " seconds")
         ### Generate Connection
         n_total = connection.generate_Connection(Data = self.data,layers = layerNode)
-        timeEnd = time.time()
-        print("Connection generation time usage: " + str(timeEnd - timeStart) + " seconds")
+        print("Connection generation time used: " + str(time.time() - timeEnd) + " seconds")
         ### Calculate dimension
-        print("Graph dimension: ",pu.dimension_calculation(n_total,(3600,1800),5,360.0,5,2))
+        print("Graph dimension: " + str(pu.dimension_calculation(n_total,(3600,1800),5,360.0,5,2)))
 
         timeEnd = time.time()
-        print("Total time usage: " + str(timeEnd - timeStart) + " seconds")
+        print("Total time used: " + str(timeEnd - timeStart) + " seconds")
 
 

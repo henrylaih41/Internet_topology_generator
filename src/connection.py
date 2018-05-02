@@ -117,25 +117,26 @@ def generate_Connection(Data,layers):
     count = 0
     s = "# Created at " + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '\n'
     file.write(s)
-    s = "# Connection parameters. Layer1-1:" + str(Data.con_Para['1,1'])  
+    s = "# Connection parameters." + "\n# Layer1-1:" + str(Data.con_Para['1,1'])
+    count += 1
     for layer in range(1,Data.Layer_Num):
         s += " Layer" + str(layer) + '-' + str(layer + 1) + ':'  + str(Data.con_Para[str(layer) + ',' + str(layer + 1)])
         count += 1
         if (count >= 3):
             count = 0
-            s += '\n' + "#                       "
+            s += '\n' + "#"
         s += " Layer" + str(layer + 1) + '-' + str(layer + 1) + ':'  + str(Data.con_Para[str(layer + 1) + ',' + str(layer + 1)])
         count += 1
     file.write(s)
     count = 0
-    s = '\n' + "# Connection Num. Layer1-1:" + str(len(Data.connections['1-1,1']))  
+    s = '\n' + "# Connection Num." + "\n# Layer1-1:" + str(len(Data.connections['1-1,1']))  
     for layer in range(1,Data.Layer_Num):
-        s += (" Layer" + str(layer) + '-' + str(layer + 1) + ':' + str(len(Data.connections[str(layer) + '-' + str(layer + 1) + ',1'])))
+        s += (" Layer" + str(layer) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer) + ',' + str(layer + 1)]))
         count += 1
         if (count >= 3):
             count = 0
-            s += '\n' + "#             "
-        s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(len(Data.connections[str(layer + 1) + '-' + str(layer + 1) + ',1'])))
+            s += '\n' + "#"
+        s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer) + ',' + str(layer + 1)]))
         count += 1
     file.write(s)
     s = '\n' + "# Lowest level starting ID, total switch number, bandwidth\n"
