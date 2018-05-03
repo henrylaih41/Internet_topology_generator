@@ -1,6 +1,7 @@
 import csv
 import random
 import time
+from decimal import Decimal
 import project_utility as pu
 import connection
 import os
@@ -81,9 +82,19 @@ class Manager:
                 buflist.insert(0,-1)
                 self.data.layer_Node_Num = list(buflist)
         
-    
+    ### TODOs
     def print_Configuration(self):
-        print("Configurations:")
+        
+        print("Configurations")
+        print("Layer_Num",self.data.Layer_Num)
+        print("output_Path",self.data.output_Path)
+        print("graph_Name",self.data.graph_Name)
+        print("con_Para",sorted(self.data.con_Para.items()))
+        print("deg_Para",sorted(self.data.deg_Para.items()))
+        print("con_Dispara",sorted(self.data.con_Dispara.items()))
+        print("node_Gen_Para",self.data.node_Gen_Para)
+        print("gen_Dispara",sorted(self.data.gen_Dispara.items()))
+        print("layer_Node_Num",self.data.layer_Node_Num[1:])
 
     def Visualize_Graph_(self):
         print("Visualizing graph....") # Future version will include this function
@@ -147,14 +158,16 @@ class Manager:
                     layerNode[layer].append(node)      
                     ID_count += 1
         timeEnd = time.time()
-        print("Node generation time used: " + str(timeEnd - timeStart) + " seconds")
+        print("Node generation time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
         ### Generate Connection
         n_total = connection.generate_Connection(Data = self.data,layers = layerNode)
-        print("Connection generation time used: " + str(time.time() - timeEnd) + " seconds")
+        print("Connection generation time used: " + str(round(time.time() - timeEnd,2)) + " seconds")
         ### Calculate dimension
-        print("Graph dimension: " + str(pu.dimension_calculation(n_total,(3600,1800),5,360.0,5,2)))
+        dim = pu.dimension_calculation(n_total,(3600,1800),5,360.0,5,2)
+        dim = round(dim,3)
+        print("Graph dimension: " + str(dim))
 
         timeEnd = time.time()
-        print("Total time used: " + str(timeEnd - timeStart) + " seconds")
+        print("Total time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
 
 

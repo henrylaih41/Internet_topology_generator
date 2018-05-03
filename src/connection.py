@@ -3,12 +3,9 @@ import random
 import time
 import datetime
 import project_utility as ut
-from copy import deepcopy
-
 def generate_Connection(Data,layers):
    
    # Variables
-
     print("Connection generation starting...")
     # Layer 1-1
     for i in range(1,len(layers[1])):
@@ -139,9 +136,9 @@ def generate_Connection(Data,layers):
         s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer) + ',' + str(layer + 1)]))
         count += 1
     file.write(s)
-    s = '\n' + "# Lowest level starting ID, total switch number, bandwidth\n"
+    s = '\n' + "# Lowest level starting ID, total switch number\n"
     file.write(s)
-    s = str(len(layers[1])) + ',' + str(node_count) + ',' + str(Data.bandwidth) + '\n'
+    s = str(len(layers[1])) + ',' + str(node_count) + ','  + '\n'
     file.write(s)
     s = "# NodeID, x_pos, y_pos, degree\n"
     file.write(s)

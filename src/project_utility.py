@@ -41,7 +41,6 @@ class Data:
             self.deg_Para[str(i) + ',' + str(i)] = 1
             if (i != self.Layer_Num):
                 self.deg_Para[str(i) + ',' + str(i + 1)] = 1
-        self.bandwidth = 100 #
         self.con_Dispara = {}
         for i in range(1,self.Layer_Num + 1):
             self.con_Dispara[str(i) + ',' + str(i)] = 1
@@ -54,7 +53,6 @@ class Data:
         self.layer_Node_Num = [-1] * (self.Layer_Num + 1)
         for i in range(1,self.Layer_Num + 1):
             self.layer_Node_Num[i] = 20*(5*i - 4)
-        self.Dimension = 1
         self.connections = {}
         self.connection_Num = {}
         for i in range(1,self.Layer_Num + 1):
