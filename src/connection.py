@@ -19,7 +19,7 @@ def generate_Connection(Data,layers):
             if minDis > dis:
                 minDis = dis
                 closest = j   
-    
+
         layers[1][closest].deg += 1
         layers[1][i].deg+=1
         Data.connections['1-1,1'].append(layers[1][closest])
@@ -37,7 +37,7 @@ def generate_Connection(Data,layers):
                  
     
     for layer in range(1,Data.Layer_Num):
-        ### Connection between layer_i-layer_i+1
+        ### Connection between layer_i and layer_i+1
         key1 = str(layer) + ',' + str(layer + 1)
         key2 = str(layer + 1) + ',' + str(layer + 1)
         for node_i in layers[layer]:
@@ -55,7 +55,7 @@ def generate_Connection(Data,layers):
                     if (node_i.connected == 1):
                         node_j.connected = 1
                  
-        ### Connection between layer_i+1-layer_i+1
+        ### Connection between layer_i+1 and layer_i+1
         for i in range(len(layers[layer + 1])):
             for j in range(i + 1,len(layers[layer + 1])):
                 node_i = layers[layer + 1][i]
