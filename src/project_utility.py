@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import csv
 
 # Node represents a connected device in the internet, ex: router
 class Node:
@@ -166,9 +167,9 @@ def buildG(G, file_name, delimiter_=','):
             if float(line[2]) != 0.0:
                 #line format: u,v,w
                 G.add_edge(int(line[0]),int(line[1]),weight=float(line[2]))
-            elif len(line) == 2:
-                #line format: u,v
-                G.add_edge(int(line[0]),int(line[1]),weight=1.0)
-            else:
-                for i in range(int(line[0])):
-                    G.add_node(i)
+        elif len(line) == 2:
+            #line format: u,v
+            G.add_edge(int(line[0]),int(line[1]),weight=1.0)
+        else:
+            for i in range(int(line[0])):
+                G.add_node(i)
