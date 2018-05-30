@@ -133,27 +133,30 @@ def generate_Connection(Data,layers):
         if (count >= 3):
             count = 0
             s += '\n' + "#"
-        s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer) + ',' + str(layer + 1)]))
+        s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer + 1) + ',' + str(layer + 1)]))
         count += 1
     file.write(s)
     s = '\n' + "# Lowest level starting ID, total switch number\n"
     file.write(s)
-    s = str(len(layers[1])) + ',' + str(node_count) + ','  + '\n'
+    s = str(len(layers[1])) + ',' + str(node_count) + '\n'
     file.write(s)
     s = "# NodeID, x_pos, y_pos, degree\n"
     file.write(s)
 
     # Node info
-    count = 0 # Can be removed
     for layer in layers:
         for node in layer:
             if (node.ID != -10):
                 s = str(node.ID) + ',' + str(node.x_pos) + ',' + str(node.y_pos) + ',' + str(node.deg) + '\n'
                 file.write(s)
-            count += 1
+            
 
+    # Outputing links to another file for graph clustering
+    file2 = open(Data.output_Path + str(Data.graph_Name) + "_links" + ".csv",'w')
     s = "# links\n"
     file.write(s)
+    file2.write(str(node_count) + '\n')
+    file2.write(s_connect)
     s_connect += 'c'
     file.write(s_connect)
     return n_total

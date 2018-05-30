@@ -16,10 +16,12 @@ class Manager:
     def set_Configuration(self, outputPath = "", graphName = "", disPara = [], genDisPara = {},
                           nodeGenPara = -1, layerNodeNum = [], layerNum = -1, conDegPara = {}, conDisPara = {}, conPara = {}):
         if (layerNum != -1):
-            if( layerNum <= 2):
-                print("Invalid layer Number, layerNum remain as default value")
+            if (layerNum < 2):
+                raise RuntimeError("Invalid layer Number!")
+                
             else:
                 self.data.Layer_Num = layerNum
+        
         if (nodeGenPara != -1):
             self.node_Gen_Para = nodeGenPara
 
@@ -68,24 +70,25 @@ class Manager:
         if (len(layerNodeNum) != 0):
 
             if (len(layerNodeNum) > self.data.Layer_Num):
-                print("Invalid layerNodeNum, too many arugment")
+                raise RuntimeError("Invalid layerNodeNum, too many arugment!")
+            
             
 
             elif(len(layerNodeNum) < self.data.Layer_Num):
-                print("Invalid layerNodeNum, missing arugment")
-
+                raise RuntimeError("Invalid layerNodeNum, missing arugment!")
+              
             else:
                 if(layerNodeNum[0] > 50):
-                    print("layer one can only have upto 50 nodes")
-                    layerNodeNum[0] = 50
+                    raise RuntimeError("layer one can only have upto 50 nodes!")
                 buflist = list(layerNodeNum)
                 buflist.insert(0,-1)
                 self.data.layer_Node_Num = list(buflist)
+      
         
     ### TODOs
     def print_Configuration(self):
         
-        print("Configurations")
+        print("\nConfigurations")
         print("Layer_Num",self.data.Layer_Num)
         print("output_Path",self.data.output_Path)
         print("graph_Name",self.data.graph_Name)
@@ -169,5 +172,4 @@ class Manager:
 
         timeEnd = time.time()
         print("Total time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
-
-
+        
