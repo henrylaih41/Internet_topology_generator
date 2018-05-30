@@ -157,18 +157,18 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
     coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)
     return -coeffs[0]
 
-    def buildG(G, file_name, delimiter_ = ','):
-    #construct the weighted version of the contact graph from cgraph.dat file
-    #reader = csv.reader(open("/home/kazem/Data/UCI/karate.txt"), delimiter=" ")
+def buildG(G, file_name, delimiter_=','):   
+#construct the weighted version of the contact graph from cgraph.dat file
+#reader = csv.reader(open("/home/kazem/Data/UCI/karate.txt"), delimiter=" ")
     reader = csv.reader(open(file_name), delimiter=delimiter_)
     for line in reader:
         if len(line) > 2:
             if float(line[2]) != 0.0:
                 #line format: u,v,w
                 G.add_edge(int(line[0]),int(line[1]),weight=float(line[2]))
-        elif len(line) == 2:
-            #line format: u,v
-            G.add_edge(int(line[0]),int(line[1]),weight=1.0)
-        else:
-            for i in range(int(line[0])):
-                G.add_node(i)
+            elif len(line) == 2:
+                #line format: u,v
+                G.add_edge(int(line[0]),int(line[1]),weight=1.0)
+            else:
+                for i in range(int(line[0])):
+                    G.add_node(i)

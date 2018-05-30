@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 _DEBUG_ = True
 
 #this method just reads the graph structure from the file
-def buildG(G, file_, delimiter_ = ','):
+def buildG(G, file_, delimiter_=','):
     #construct the weighted version of the contact graph from cgraph.dat file
     #reader = csv.reader(open("/home/kazem/Data/UCI/karate.txt"), delimiter=" ")
     reader = csv.reader(open(file_), delimiter=delimiter_)
