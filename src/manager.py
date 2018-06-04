@@ -1,6 +1,7 @@
 import csv
 import random
 import time
+from decimal import Decimal
 import project_utility as pu
 import connection
 import os
@@ -15,10 +16,12 @@ class Manager:
     def set_Configuration(self, outputPath = "", graphName = "", disPara = [], genDisPara = {},
                           nodeGenPara = -1, layerNodeNum = [], layerNum = -1, conDegPara = {}, conDisPara = {}, conPara = {}):
         if (layerNum != -1):
-            if( layerNum <= 2):
-                print("Invalid layer Number, layerNum remain as default value")
+            if (layerNum < 2):
+                raise RuntimeError("Invalid layer Number!")
+                
             else:
                 self.data.Layer_Num = layerNum
+        
         if (nodeGenPara != -1):
             self.node_Gen_Para = nodeGenPara
 
@@ -67,23 +70,34 @@ class Manager:
         if (len(layerNodeNum) != 0):
 
             if (len(layerNodeNum) > self.data.Layer_Num):
-                print("Invalid layerNodeNum, too many arugment")
+                raise RuntimeError("Invalid layerNodeNum, too many arugment!")
+            
             
 
             elif(len(layerNodeNum) < self.data.Layer_Num):
-                print("Invalid layerNodeNum, missing arugment")
-
+                raise RuntimeError("Invalid layerNodeNum, missing arugment!")
+              
             else:
                 if(layerNodeNum[0] > 50):
-                    print("layer one can only have upto 50 nodes")
-                    layerNodeNum[0] = 50
+                    raise RuntimeError("layer one can only have upto 50 nodes!")
                 buflist = list(layerNodeNum)
                 buflist.insert(0,-1)
                 self.data.layer_Node_Num = list(buflist)
+      
         
-    
+    ### TODOs
     def print_Configuration(self):
-        print("Configurations:")
+        
+        print("\nConfigurations")
+        print("Layer_Num",self.data.Layer_Num)
+        print("output_Path",self.data.output_Path)
+        print("graph_Name",self.data.graph_Name)
+        print("con_Para",sorted(self.data.con_Para.items()))
+        print("deg_Para",sorted(self.data.deg_Para.items()))
+        print("con_Dispara",sorted(self.data.con_Dispara.items()))
+        print("node_Gen_Para",self.data.node_Gen_Para)
+        print("gen_Dispara",sorted(self.data.gen_Dispara.items()))
+        print("layer_Node_Num",self.data.layer_Node_Num[1:])
 
     def Visualize_Graph_(self):
         print("Visualizing graph....") # Future version will include this function
@@ -147,15 +161,15 @@ class Manager:
                     layerNode[layer].append(node)      
                     ID_count += 1
         timeEnd = time.time()
-        print("Node generation time usage: " + str(timeEnd - timeStart) + " seconds")
+        print("Node generation time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
         ### Generate Connection
         n_total = connection.generate_Connection(Data = self.data,layers = layerNode)
-        timeEnd = time.time()
-        print("Connection generation time usage: " + str(timeEnd - timeStart) + " seconds")
+        print("Connection generation time used: " + str(round(time.time() - timeEnd,2)) + " seconds")
         ### Calculate dimension
-        print("Graph dimension: ",pu.dimension_calculation(n_total,(3600,1800),5,360.0,5,2))
+        dim = pu.dimension_calculation(n_total,(3600,1800),5,360.0,5,2)
+        dim = round(dim,3)
+        print("Graph dimension: " + str(dim))
 
         timeEnd = time.time()
-        print("Total time usage: " + str(timeEnd - timeStart) + " seconds")
-
-
+        print("Total time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
+        

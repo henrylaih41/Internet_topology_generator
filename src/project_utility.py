@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import csv
 
 # Node represents a connected device in the internet, ex: router
 class Node:
@@ -21,12 +22,15 @@ class Node:
         return ((delta_x)**2 + (self.y_pos - other_Node.y_pos)**2)**0.5
     
     # Set the target node's connected flag to true, recursively called.
+    # A node being connected means that it is directly or indirectly connected to 
+    # the layer_1 nodes.
     def net(self):
         for node in self.target:
             if node.connected == 0:
                 node.connected = 1
                 node.net()
-
+# The class for storing configurations.
+# Set with some default values
 class Data:
     def __init__(self):
         self.Layer_Num = 2
@@ -41,7 +45,6 @@ class Data:
             self.deg_Para[str(i) + ',' + str(i)] = 1
             if (i != self.Layer_Num):
                 self.deg_Para[str(i) + ',' + str(i + 1)] = 1
-        self.bandwidth = 100 #
         self.con_Dispara = {}
         for i in range(1,self.Layer_Num + 1):
             self.con_Dispara[str(i) + ',' + str(i)] = 1
@@ -54,7 +57,6 @@ class Data:
         self.layer_Node_Num = [-1] * (self.Layer_Num + 1)
         for i in range(1,self.Layer_Num + 1):
             self.layer_Node_Num[i] = 20*(5*i - 4)
-        self.Dimension = 1
         self.connections = {}
         self.connection_Num = {}
         for i in range(1,self.Layer_Num + 1):
@@ -81,7 +83,7 @@ class Region:
     sum = 0 # Static
 
 def map_Cordinate_Generator(continent_List):
-    if (len(Region.Regions) == 0): # Read the info if it haven't yet.
+    if (len(Region.Regions) == 0): # Read the continent_List if it haven't yet.
         for list in continent_List:
             region = Region(int(list[0]),int(list[1]),int(list[2]),int(list[3]))
             Region.Regions.append(region)
@@ -91,15 +93,13 @@ def map_Cordinate_Generator(continent_List):
 
     pro = random.randrange(0,Region.sum)
     sum_buf = 0
-    # the pro is directly proportional to the continent's area
+    # the probability is directly proportional to the continent's area
     for region in Region.Regions:
         if (sum_buf <= pro < sum_buf + region.area):
             x = random.randrange(region.x1,region.x2)
             y = random.randrange(region.y2,region.y1)
             return (x,y)
         sum_buf += region.area
-#for region in Regions:
-#  print(str(region.y1) + ' ' + str(region.x1) + ' ' + str(region.y2) + ' ' + str(region.x2))
 
 # Just changes the ID mapping, not important, You can ask Pohan for the concept.
 def delete_unconnected_new_mapping( node_array ): # Input is an array of nodes
@@ -109,7 +109,8 @@ def delete_unconnected_new_mapping( node_array ): # Input is an array of nodes
         node_mapping.append(j)
     for i in range(length):
         if node_array[i].connected == 0:
-            node_mapping[i] = -10 # Set the iD to -10 if the node is not in the graph
+            node_mapping[i] = -10 # Set the iD to -10 if the node is not in the graph.
+                                  # -10 doesn't have any special meaning
             for j in range(i+1,length):
                 node_mapping[j] = node_mapping[j] -1
     for i in range(length):
@@ -154,8 +155,44 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
     # Actual box counting with decreasing size
     counts = []
     for size in sizes:
-        print(size)
         counts.append(box_count(image_pos, size))
     # Calculate the dimension with linear regression
     coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)
     return -coeffs[0]
+
+#construct the weighted version of the contact graph from the input file
+#First line in the file must be the number of nodes in the graph
+#Other lines are the links
+#link format: node_id1,node_id2,weight or node_id1,node_id2 (weight = 1)
+def buildG(G, file_name, delimiter_=','):   
+    reader = csv.reader(open(file_name), delimiter=delimiter_)
+    for line in reader:
+        if len(line) > 2:
+            if float(line[2]) != 0.0:
+                #line format: u,v,w
+                G.add_edge(int(line[0]),int(line[1]),weight=float(line[2]))
+        elif len(line) == 2:
+            #line format: u,v
+            G.add_edge(int(line[0]),int(line[1]),weight=1.0)
+        else:
+            for i in range(int(line[0])):
+                G.add_node(i)
+### gets the gateway router in different AS, must run mcl.graph_clustering first.
+def get_gateway(G):
+    G.graph['gateWayList'] = {}
+    for i in range(G.graph['Total_AS']):
+        G.graph['gateWayList'][str(i)] = set()
+    for e in G.edges():
+        if(G.node[e[0]]['AS_N'] != G.node[e[1]]['AS_N']):
+            G.add_node(e[0],isGateway = True)
+            G.add_node(e[1],isGateway = True)
+            G.graph['gateWayList'][str(G.node[e[0]]['AS_N'])].add(e[0])
+            G.graph['gateWayList'][str(G.node[e[1]]['AS_N'])].add(e[1])
+        else:
+            if((G.node[e[0]].get('isGateway')) == None):
+                G.add_node(e[0],isGateway = False)
+            if((G.node[e[1]].get('isGateway')) == None):
+                G.add_node(e[1],isGateway = False)
+        
+
+

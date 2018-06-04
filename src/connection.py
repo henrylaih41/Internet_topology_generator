@@ -3,12 +3,9 @@ import random
 import time
 import datetime
 import project_utility as ut
-from copy import deepcopy
-
 def generate_Connection(Data,layers):
    
    # Variables
-
     print("Connection generation starting...")
     # Layer 1-1
     for i in range(1,len(layers[1])):
@@ -22,7 +19,7 @@ def generate_Connection(Data,layers):
             if minDis > dis:
                 minDis = dis
                 closest = j   
-    
+
         layers[1][closest].deg += 1
         layers[1][i].deg+=1
         Data.connections['1-1,1'].append(layers[1][closest])
@@ -40,7 +37,7 @@ def generate_Connection(Data,layers):
                  
     
     for layer in range(1,Data.Layer_Num):
-        ### Connection between layer_i-layer_i+1
+        ### Connection between layer_i and layer_i+1
         key1 = str(layer) + ',' + str(layer + 1)
         key2 = str(layer + 1) + ',' + str(layer + 1)
         for node_i in layers[layer]:
@@ -58,7 +55,7 @@ def generate_Connection(Data,layers):
                     if (node_i.connected == 1):
                         node_j.connected = 1
                  
-        ### Connection between layer_i+1-layer_i+1
+        ### Connection between layer_i+1 and layer_i+1
         for i in range(len(layers[layer + 1])):
             for j in range(i + 1,len(layers[layer + 1])):
                 node_i = layers[layer + 1][i]
@@ -117,45 +114,49 @@ def generate_Connection(Data,layers):
     count = 0
     s = "# Created at " + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '\n'
     file.write(s)
-    s = "# Connection parameters. Layer1-1:" + str(Data.con_Para['1,1'])  
+    s = "# Connection parameters." + "\n# Layer1-1:" + str(Data.con_Para['1,1'])
+    count += 1
     for layer in range(1,Data.Layer_Num):
         s += " Layer" + str(layer) + '-' + str(layer + 1) + ':'  + str(Data.con_Para[str(layer) + ',' + str(layer + 1)])
         count += 1
         if (count >= 3):
             count = 0
-            s += '\n' + "#                       "
+            s += '\n' + "#"
         s += " Layer" + str(layer + 1) + '-' + str(layer + 1) + ':'  + str(Data.con_Para[str(layer + 1) + ',' + str(layer + 1)])
         count += 1
     file.write(s)
     count = 0
-    s = '\n' + "# Connection Num. Layer1-1:" + str(len(Data.connections['1-1,1']))  
+    s = '\n' + "# Connection Num." + "\n# Layer1-1:" + str(len(Data.connections['1-1,1']))  
     for layer in range(1,Data.Layer_Num):
-        s += (" Layer" + str(layer) + '-' + str(layer + 1) + ':' + str(len(Data.connections[str(layer) + '-' + str(layer + 1) + ',1'])))
+        s += (" Layer" + str(layer) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer) + ',' + str(layer + 1)]))
         count += 1
         if (count >= 3):
             count = 0
-            s += '\n' + "#             "
-        s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(len(Data.connections[str(layer + 1) + '-' + str(layer + 1) + ',1'])))
+            s += '\n' + "#"
+        s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer + 1) + ',' + str(layer + 1)]))
         count += 1
     file.write(s)
-    s = '\n' + "# Lowest level starting ID, total switch number, bandwidth\n"
+    s = '\n' + "# Lowest level starting ID, total switch number\n"
     file.write(s)
-    s = str(len(layers[1])) + ',' + str(node_count) + ',' + str(Data.bandwidth) + '\n'
+    s = str(len(layers[1])) + ',' + str(node_count) + '\n'
     file.write(s)
     s = "# NodeID, x_pos, y_pos, degree\n"
     file.write(s)
 
     # Node info
-    count = 0 # Can be removed
     for layer in layers:
         for node in layer:
             if (node.ID != -10):
                 s = str(node.ID) + ',' + str(node.x_pos) + ',' + str(node.y_pos) + ',' + str(node.deg) + '\n'
                 file.write(s)
-            count += 1
+            
 
+    # Outputing links to another file for graph clustering
+    file2 = open(Data.output_Path + str(Data.graph_Name) + "_links" + ".csv",'w')
     s = "# links\n"
     file.write(s)
+    file2.write(str(node_count) + '\n')
+    file2.write(s_connect)
     s_connect += 'c'
     file.write(s_connect)
     return n_total
