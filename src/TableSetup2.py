@@ -1,7 +1,6 @@
 import networkx as nx
-import InterAS2 as InterAS
+import InterAS3 as InterAS
 import IntraAS as IntraAS
-import matplotlib.pyplot as plt
 import project_utility as pu
 import mcl as mcl 
 import time
@@ -57,21 +56,10 @@ def TableSetup(G, filename):
 	InterAS.InterAS(G, DictGWs)
 	print('InterTable have constructed')
 
-'''test'''
+'''test
 G = nx.Graph()
 timestamp1 = time.time()
-TableSetup(G, '2018-5-30-302nodes_links.csv')
+TableSetup(G, '2018-5-30-69nodes_links.csv')
 timestamp2 = time.time()
 print ("This took %.2f seconds" % (timestamp2 - timestamp1))
-# print(G.graph['gateWayList'])
-# nx.draw(G, with_labels=True, font_weight='bold')
-# plt.show()
-# gateway to gateway
-# print(pathfinding(29, 22, G))
-# gateway to nongateway
-# print(pathfinding(29, 58, G))
-# nongateway to gateway
-# print(pathfinding(52, 13, G))
-# nongateway to nonegateway
-# print(pathfinding(52, 12, G))
-path = pathfinding(2, 256, G)
+print(G.nodes[30])'''

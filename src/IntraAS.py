@@ -1,5 +1,4 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 
 def IntraAS(G, ASnumber, nodesinthisAS, DictGWs):
 	# Input: 
@@ -27,6 +26,7 @@ def IntraAS(G, ASnumber, nodesinthisAS, DictGWs):
 		lengthtogateway = []
 		corrosgatewayid = []
 		flag = (i in gateway)
+
 		for j in p:
 			# Check if node[i] is nongateway
 			if flag == False:
@@ -42,10 +42,10 @@ def IntraAS(G, ASnumber, nodesinthisAS, DictGWs):
 			else:
 				p[j] = p[j][0]
 		G.add_node(i, IntraTable = p)
-		# 'DefaultGateway' is the cloest (shortest path length) gateway for the node[i]
+		# 'DefaultGateway' is the next node id to the cloest (shortest path length) gateway for the node[i]
 		if flag == False:
 			index = lengthtogateway.index(min(lengthtogateway))
-			G.add_node(i, DefaultGateway = corrosgatewayid[index])
+			G.add_node(i, DefaultGateway = nx.shortest_path(G, source = i, target = corrosgatewayid[index])[1])
 
 '''test
 node = [1,2,3,4,5,6,7,8,9,10]
