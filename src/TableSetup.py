@@ -1,5 +1,7 @@
+# Author: Andrew Liu
+
 import networkx as nx
-import InterAS3 as InterAS
+import InterAS as InterAS
 import IntraAS as IntraAS
 import project_utility as pu
 import mcl as mcl 
@@ -36,7 +38,8 @@ def pathfinding(SourceNodeID, DestNodeID, G):
 	print('The path from node {} to node {} is {}'.format(SourceNodeID, DestNodeID, path))
 	return path
 
-def TableSetup(G, filename):
+def TableSetup(filename):
+	G = nx.Graph()
 	pu.buildG(G, filename)
 	mcl.graph_clustering(G)
 	pu.get_gateway(G)

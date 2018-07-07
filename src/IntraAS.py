@@ -1,3 +1,5 @@
+# Author: Andrew Liu
+
 import networkx as nx
 
 def IntraAS(G, ASnumber, nodesinthisAS, DictGWs):

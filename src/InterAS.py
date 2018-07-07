@@ -1,3 +1,5 @@
+# Author: Andrew Liu
+
 import networkx as nx
 
 def InterAS(G, DictGWs):
