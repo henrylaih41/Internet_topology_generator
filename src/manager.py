@@ -295,7 +295,7 @@ def generate_Connection(Data,layers):
         s += (" Layer" + str(layer + 1) + '-' + str(layer + 1) + ':' + str(Data.connection_Num[str(layer + 1) + ',' + str(layer + 1)]))
         count += 1
     file.write(s)
-    s = '\n' + "# Lowest level starting ID, total switch number\n"
+    s = '\n' + "# Lowest level starting ID, total router number\n"
     file.write(s)
     s = str(len(layers[1])) + ',' + str(node_count) + '\n'
     file.write(s)
