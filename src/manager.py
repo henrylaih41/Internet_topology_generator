@@ -73,8 +73,8 @@ class Manager:
             elif(len(layerNodeNum) < self.data.Layer_Num):
                 raise RuntimeError("Invalid layerNodeNum, missing arugment!")
             else:
-                if(layerNodeNum[0] > 50):
-                    raise RuntimeError("layer one can only have upto 50 nodes!")
+                if(layerNodeNum[0] > 48):
+                    raise RuntimeError("layer one can only have upto 48 nodes!")
                 buflist = list(layerNodeNum)
                 buflist.insert(0,-1)
                 self.data.layer_Node_Num = list(buflist)
