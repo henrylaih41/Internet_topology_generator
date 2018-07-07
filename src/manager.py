@@ -300,8 +300,6 @@ def generate_Connection(Data,layers):
     s = str(len(layers[1])) + ',' + str(node_count) + '\n'
     file.write(s)
     s = "# NodeID, x_pos, y_pos, degree\n"
-    file.write(s)
-
     # Writing Node info
     for layer in layers:
         for node in layer:
