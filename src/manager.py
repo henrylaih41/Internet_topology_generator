@@ -6,7 +6,7 @@ import networkx as nx
 from decimal import Decimal
 import project_utility as pu
 import os
-#from configuration import *
+
 # Author: Henry
 class Manager:
     def __init__(self):
