@@ -302,10 +302,15 @@ def generate_Connection(Data,layers):
     s = "# NodeID, x_pos, y_pos, degree\n"
     file.write(s)
 
-    # Wirint Node info
+    # Writing Node info
     for layer in layers:
         for node in layer:
             if (node.ID != -10):
-                s = str(node.ID) + ',' + str(node.x_pos) + ',' + str(node.y_pos) + ',' + str(node.deg) + '\n'
-                file.write(s)
+                s += str(node.ID) + ',' + str(node.x_pos) + ',' + str(node.y_pos) + ',' + str(node.deg) + '\n'
+    file.write(s)
+    # Writing Links
+    s = "# Links\n"
+    file.write(s)
+    s_connect += "c"
+    file.write(s_connect)
     return n_total

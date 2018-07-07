@@ -38,10 +38,9 @@ def pathfinding(SourceNodeID, DestNodeID, G):
 	print('The path from node {} to node {} is {}'.format(SourceNodeID, DestNodeID, path))
 	return path
 
-def TableSetup(filename):
-	G = nx.Graph()
+def TableSetup(G,filename,cluster_rate = 1.5):
 	pu.buildG(G, filename)
-	mcl.graph_clustering(G)
+	mcl.graph_clustering(G,cluster_rate)
 	pu.get_gateway(G)
 	DictGWs = G.graph['gateWayList']
 	AS = list(DictGWs.keys())
@@ -58,11 +57,3 @@ def TableSetup(filename):
 	# Construct the InterTable
 	InterAS.InterAS(G, DictGWs)
 	print('InterTable have constructed')
-
-'''test
-G = nx.Graph()
-timestamp1 = time.time()
-TableSetup(G, '2018-5-30-69nodes_links.csv')
-timestamp2 = time.time()
-print ("This took %.2f seconds" % (timestamp2 - timestamp1))
-print(G.nodes[30])'''

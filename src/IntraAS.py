@@ -49,14 +49,3 @@ def IntraAS(G, ASnumber, nodesinthisAS, DictGWs):
 			index = lengthtogateway.index(min(lengthtogateway))
 			G.add_node(i, DefaultGateway = nx.shortest_path(G, source = i, target = corrosgatewayid[index])[1])
 
-'''test
-node = [1,2,3,4,5,6,7,8,9,10]
-edge = [(1,2),(1,3),(1,4),(3,5),(5,6),(6,9),(8,10),(2,3),(4,6),(3,7),(7,10),(6,10)]
-G = nx.Graph()
-G.add_nodes_from(node)
-G.add_edges_from(edge)
-DictGWs = {1: [2,8]}
-IntraAS(G, 1, [2,3,5,8,10], DictGWs)
-print(G.nodes[2], G.nodes[5], G.nodes[7])
-nx.draw(G, with_labels=True, font_weight='bold')
-plt.show()'''

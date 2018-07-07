@@ -47,15 +47,3 @@ def InterAS(G, DictGWs):
 					corrospath = nx.shortest_path(GW, source = j, target = corrosgatewayid[index])
 					InterTableforj[k] = corrospath[1]
 			G.add_node(j, InterTable = InterTableforj)
-
-'''test
-G = nx.Graph()
-pu.buildG(G, '2018-5-30-302nodes_links.csv')
-mcl.graph_clustering(G)
-pu.get_gateway(G)
-DictGWs = G.graph['gateWayList']
-t1 = time.time()
-InterAS(G, DictGWs)
-t2 = time.time()
-print(t2-t1, 'sec')
-print(G.nodes[172])'''

@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import csv
+import itertools as iter
 
 # Author: Henry
 # Node represents a connected device in the internet, ex: router
@@ -182,7 +183,7 @@ def buildG(G, file_, delimiter_=','):
     read_node_num = False
     reader = csv.reader(open(file_), delimiter=delimiter_)
     for line in reader:
-        if(line[0] == "# links"):
+        if(line[0] == "# Links"):
             start_reading_links = True
             continue
         if(line[0] == "# Lowest level starting ID"):
@@ -220,6 +221,16 @@ def get_gateway(G):
                 G.add_node(e[0],isGateway = False)
             if((G.node[e[1]].get('isGateway')) == None):
                 G.add_node(e[1],isGateway = False)
+    connect_interAS_gateway(G)
+# Author: Henry
+# connects all the gateWay in the Same AS.
+# According to BGP, InterAS gateways should be fully connected.
+def connect_interAS_gateway(G):
+    for AS_Num in G.graph['gateWayList']:
+        for pairs in iter.combinations(G.graph['gateWayList'][AS_Num],2):
+            G.add_edge(pairs[0],pairs[1])
+           
+
     
         
 
