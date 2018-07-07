@@ -5,8 +5,8 @@ from cmty import buildG
 import sys
 import matplotlib.pyplot as plt
 
-# Cluster_rate determine how big the cluster are. Recommend value: 1.1 ~ 1.9
-# 
+# Cluster_rate determine how big the cluster are, Recommend value: 1.1 ~ 1.9
+# The higher Cluster_rate the more AS will be generated.
 def graph_clustering(graph,cluster_rate = 1.5, draw = False):
     AS_Num = 0
     n_Matrix = nx.to_scipy_sparse_matrix(graph)

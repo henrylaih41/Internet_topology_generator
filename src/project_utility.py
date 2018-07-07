@@ -57,6 +57,7 @@ class Data:
         self.layer_Node_Num = [-1] * (self.Layer_Num + 1)
         for i in range(1,self.Layer_Num + 1):
             self.layer_Node_Num[i] = 20*(5*i - 4)
+        ### storing the node connections as a dictionary
         self.connections = {}
         self.connection_Num = {}
         for i in range(1,self.Layer_Num + 1):
@@ -164,19 +165,33 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
 #First line in the file must be the number of nodes in the graph
 #Other lines are the links
 #link format: node_id1,node_id2,weight or node_id1,node_id2 (weight = 1)
-def buildG(G, file_name, delimiter_=','):   
-    reader = csv.reader(open(file_name), delimiter=delimiter_)
+def buildG(G, file_, delimiter_=','):
+    #construct the weighted version of the contact graph from cgraph.dat file
+    #reader = csv.reader(open("/home/kazem/Data/UCI/karate.txt"), delimiter=" ")
+    start_reading_links = False
+    read_node_num = False
+    reader = csv.reader(open(file_), delimiter=delimiter_)
     for line in reader:
-        if len(line) > 2:
-            if float(line[2]) != 0.0:
-                #line format: u,v,w
-                G.add_edge(int(line[0]),int(line[1]),weight=float(line[2]))
-        elif len(line) == 2:
-            #line format: u,v
-            G.add_edge(int(line[0]),int(line[1]),weight=1.0)
-        else:
-            for i in range(int(line[0])):
+        if(line[0] == "# links"):
+            start_reading_links = True
+            continue
+        if(line[0] == "# Lowest level starting ID"):
+            read_node_num = True
+            continue
+        if(line[0] == "c"):
+            break
+        if(read_node_num):
+            for i in range(int(line[1])):
                 G.add_node(i)
+            read_node_num = False
+        if(start_reading_links):
+            if len(line) > 2:
+                if float(line[2]) != 0.0:
+                    #line format: u,v,w
+                    G.add_edge(int(line[0]),int(line[1]),weight=float(line[2]))
+            elif len(line) == 2:
+                #line format: u,v
+                G.add_edge(int(line[0]),int(line[1]),weight=1.0)
 ### gets the gateway router in different AS, must run mcl.graph_clustering first.
 def get_gateway(G):
     G.graph['gateWayList'] = {}
