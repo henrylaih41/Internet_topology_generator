@@ -2,7 +2,7 @@ import random
 import numpy as np
 import csv
 import itertools as iter
-
+import node_gen as n
 # Author: Henry
 # Node represents a connected device in the internet, ex: router
 class Node:
@@ -16,15 +16,10 @@ class Node:
         self.ID = ID_Num # The node's ID
     
     # Calculates distance between two nodes
+    # get_distance is written is cython
     def distance(self,other_Node):
-        delta_x = abs(self.x_pos - other_Node.x_pos)
-        # The Earth is round, so the distance between x coordinate will not exceed 18000 
-        # (We've set the width of Earth to 36000)  
-        # y cordinate is another case, since we have considered the polar area uncrossable.
-        if (delta_x > 18000):
-            delta_x = 36000 - delta_x
-        return ((delta_x)**2 + (self.y_pos - other_Node.y_pos)**2)**0.5
-    
+        return n.get_distance(self.x_pos,other_Node.x_pos,self.y_pos,other_Node.y_pos)
+        
     # Set the target node's connected flag to true, recursively called.
     # A node being connected means that it is directly or indirectly connected to 
     # the layer_1 nodes.

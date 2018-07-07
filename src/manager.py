@@ -6,6 +6,7 @@ import networkx as nx
 from decimal import Decimal
 import project_utility as pu
 import os
+import node_gen as ng
 
 # Author: Henry
 class Manager:
@@ -146,6 +147,7 @@ class Manager:
                 if (pro < self.data.node_Gen_Para*Sum): # node_Gen_Para controls the speed of generating nodes. Don't set too large values
                     layerNode[layer].append(node)      
                     ID_count += 1
+        
         timeEnd = time.time()
         print("Node generation time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
         ### Generate Connection
