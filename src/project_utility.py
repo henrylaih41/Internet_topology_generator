@@ -2,6 +2,7 @@ import random
 import numpy as np
 import csv
 
+# Author: Henry
 # Node represents a connected device in the internet, ex: router
 class Node:
     
@@ -9,14 +10,16 @@ class Node:
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.deg = 0
-        self.target = []   # Node connected to this node 
-        self.connected = 0 # If 1 means this node is in the graph, else it is out of the graph.
-        self.ID = ID_Num
+        self.target = []   # stores the nodes that are connected to this node 
+        self.connected = 0 # If connected is set to 1 means this node is in the graph, else it is out of the graph.
+        self.ID = ID_Num # The node's ID
     
-    # Calculate Distance between two nodes
+    # Calculates distance between two nodes
     def distance(self,other_Node):
         delta_x = abs(self.x_pos - other_Node.x_pos)
-        # Earth is round, y cordinate is not considered, since it goes across the polar area.
+        # The Earth is round, so the distance between x coordinate will not exceed 18000 
+        # (We've set the width of Earth to 36000)  
+        # y cordinate is another case, since we have considered the polar area uncrossable.
         if (delta_x > 18000):
             delta_x = 36000 - delta_x
         return ((delta_x)**2 + (self.y_pos - other_Node.y_pos)**2)**0.5
@@ -29,13 +32,15 @@ class Node:
             if node.connected == 0:
                 node.connected = 1
                 node.net()
+
+# Author: Henry
 # The class for storing configurations.
 # Set with some default values
 class Data:
     def __init__(self):
         self.Layer_Num = 2
         self.output_Path = "./"
-        self.graph_Name = "testing_v3"
+        self.graph_Name = "Default"
         self.con_Para = {}
         self.con_Para['1,1'] = 75
         self.con_Para['1,2'] = 6
@@ -71,10 +76,11 @@ class Data:
                 self.connections[str(i) + '-' + str(i + 1) + ',1'] = []
                 self.connections[str(i) + '-' + str(i + 1) + ',2'] = []
              
-
+# Author: Henry
 # Just a class for the function map_Cordinate_Generator(continent_List)
 class Region:
     def __init__(self,y1_pos,x1_pos,y2_pos,x2_pos):
+    # The four vertex of the region.
         self.x1 = x1_pos
         self.y1 = y1_pos
         self.x2 = x2_pos
@@ -83,9 +89,14 @@ class Region:
     Regions = [] # Static, can be seen as a global variable within the class.
     sum = 0 # Static
 
+# Author: Henry
+# This function is for generating (x,y) pairs with specific restriction, since
+# there is no router on the sea.
+# Return (x,y) coordinate pairs that locates on the continents in continent_List
 def map_Cordinate_Generator(continent_List):
     if (len(Region.Regions) == 0): # Read the continent_List if it haven't yet.
         for list in continent_List:
+            # All region is a rectangle, defined by four vertex.
             region = Region(int(list[0]),int(list[1]),int(list[2]),int(list[3]))
             Region.Regions.append(region)
         
@@ -102,7 +113,10 @@ def map_Cordinate_Generator(continent_List):
             return (x,y)
         sum_buf += region.area
 
-# Just changes the ID mapping, not important, You can ask Pohan for the concept.
+# Author: Pohan
+# Because of some unconnected nodes, we need to remove them from the graph.
+# we do this by changing the ID mapping, setting the unconnected node's ID to -10
+# then reorder the rest of the nodes.
 def delete_unconnected_new_mapping( node_array ): # Input is an array of nodes
     node_mapping = []
     length = len(node_array)
@@ -111,12 +125,12 @@ def delete_unconnected_new_mapping( node_array ): # Input is an array of nodes
     for i in range(length):
         if node_array[i].connected == 0:
             node_mapping[i] = -10 # Set the iD to -10 if the node is not in the graph.
-                                  # -10 doesn't have any special meaning
             for j in range(i+1,length):
                 node_mapping[j] = node_mapping[j] -1
     for i in range(length):
         node_array[i].ID = node_mapping[i]
 
+# Author: Andrew
 def dimension_calculation(image, image_size,unit, initial_box_size, number_of_linear_regression, scale):
     # image would be a list of object(node)
     # suggest setting initial_box_soze to be 1/100 of image_size, unit = 1
@@ -161,13 +175,9 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
     coeffs = np.polyfit(np.log(sizes), np.log(counts), 1)
     return -coeffs[0]
 
-#construct the weighted version of the contact graph from the input file
-#First line in the file must be the number of nodes in the graph
-#Other lines are the links
-#link format: node_id1,node_id2,weight or node_id1,node_id2 (weight = 1)
+# Author: Henry
+# Construct the graph from the file_ (.csv)
 def buildG(G, file_, delimiter_=','):
-    #construct the weighted version of the contact graph from cgraph.dat file
-    #reader = csv.reader(open("/home/kazem/Data/UCI/karate.txt"), delimiter=" ")
     start_reading_links = False
     read_node_num = False
     reader = csv.reader(open(file_), delimiter=delimiter_)
@@ -192,7 +202,9 @@ def buildG(G, file_, delimiter_=','):
             elif len(line) == 2:
                 #line format: u,v
                 G.add_edge(int(line[0]),int(line[1]),weight=1.0)
-### gets the gateway router in different AS, must run mcl.graph_clustering first.
+
+# Author: Henry
+# gets the gateway router in different AS, must run mcl.graph_clustering first.
 def get_gateway(G):
     G.graph['gateWayList'] = {}
     for i in range(G.graph['Total_AS']):
@@ -208,6 +220,7 @@ def get_gateway(G):
                 G.add_node(e[0],isGateway = False)
             if((G.node[e[1]].get('isGateway')) == None):
                 G.add_node(e[1],isGateway = False)
+    
         
 
 

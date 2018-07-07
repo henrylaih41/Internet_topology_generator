@@ -7,13 +7,12 @@ from decimal import Decimal
 import project_utility as pu
 import os
 #from configuration import *
-
+# Author: Henry
 class Manager:
-    #def __init__(self):
-    #   self = self
     def __init__(self):
         self.data = pu.Data()
-    
+        
+    # Set the configuration in the data object.
     def set_Configuration(self, outputPath = "", graphName = "", disPara = [], genDisPara = {},
                           nodeGenPara = -1, layerNodeNum = [], layerNum = -1, conDegPara = {}, conDisPara = {}, conPara = {}):
         if (layerNum != -1):
@@ -93,11 +92,8 @@ class Manager:
         print("node_Gen_Para",self.data.node_Gen_Para)
         print("gen_Dispara",sorted(self.data.gen_Dispara.items()))
         print("layer_Node_Num",self.data.layer_Node_Num[1:])
-
-    def Visualize_Graph_(self):
-        print("Visualizing graph....") # Future version will include this function
-
-
+    
+    # Aurthor: Henry & Pohan
     def generate_Graph(self):
         timeStart = time.time()
         print('Node generation starting...')
@@ -109,11 +105,10 @@ class Manager:
 
         # 1.Generate node
         ## 1-1 First Layer
-
         for i in range(self.data.layer_Node_Num[1]):
             node = pu.Node(ID_Num = ID_count)
             layerNode[1].append(node)
-            node.connected = 1 # Layer_1 nodes will always be in the graph (check connection.py)
+            node.connected = 1 # Layer_1 nodes will always be in the Graph (Layer 1 is the backbone of the internet)
             ID_count += 1
 
         CSV = csv.reader(open('1layer.csv'),delimiter = ',')
@@ -126,16 +121,12 @@ class Manager:
             if (count == self.data.layer_Node_Num[1]): # Can only have up to 50 layer1_Nodes
                 break
 
-        # For debugging
-        #for node in layerNode[1]:
-        #   print(node.x_pos,node.y_pos)
-
         ## 1-2 Generate Second Layer
         ### Read Continent info
         cont_List = []
         CSV = csv.reader(open('continent.csv'),delimiter = ',')
         for row in CSV:
-            buf_list = [row[0],row[1],row[2],row[3]] #(x1,y1,x2,y2) four points, not sure if that is the order, check project_utility.py
+            buf_list = [row[0],row[1],row[2],row[3]] # Reading the continent info, (x1,y1,x2,y2) determines a rectangle.
             cont_List.append(buf_list)
 
         ### Generate nodes
@@ -168,6 +159,10 @@ class Manager:
         timeEnd = time.time()
         print("Total time used: " + str(round(timeEnd - timeStart,2)) + " seconds")
 
+# Aurthor: Henry & Pohan
+# generates the connection between nodes, according to the configurations.
+# Connections will only exist in the same layer or bewteen upper and lower layes.
+# Ex: 1-2, 2-2, 2-3
 def generate_Connection(Data,layers):
    
    # Variables
@@ -257,7 +252,7 @@ def generate_Connection(Data,layers):
     file = open(Data.output_Path + str(Data.graph_Name) + ".csv",'w')
     s_connect = ""
 
-    # Links
+    # Writing Links
     key = str(1) + '-' + str(1)
     for i in range(len(Data.connections[key + ',1'])):
         if (Data.connections[key + ',1'][i].ID != -10): # if the first node is in graph, the second one must be too.
@@ -274,7 +269,7 @@ def generate_Connection(Data,layers):
                 s_connect += str(Data.connections[key + ',1'][j].ID) + ',' + str(Data.connections[key + ',2'][j].ID) + '\n'
                 Data.connection_Num[str(i+1) + ',' + str(i+1)] += 1
 
-    # Parameters
+    # Writing Parameters
     count = 0
     s = "# Created at " + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '\n'
     file.write(s)
@@ -307,10 +302,10 @@ def generate_Connection(Data,layers):
     s = "# NodeID, x_pos, y_pos, degree\n"
     file.write(s)
 
-    # Node info
+    # Wirint Node info
     for layer in layers:
         for node in layer:
             if (node.ID != -10):
                 s = str(node.ID) + ',' + str(node.x_pos) + ',' + str(node.y_pos) + ',' + str(node.deg) + '\n'
                 file.write(s)
-    return n_total 
+    return n_total
