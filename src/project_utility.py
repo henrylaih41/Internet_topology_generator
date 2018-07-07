@@ -183,7 +183,7 @@ def buildG(G, file_, delimiter_=','):
     read_node_num = False
     reader = csv.reader(open(file_), delimiter=delimiter_)
     for line in reader:
-        if(line[0] == "# Links"):
+        if(line[0] == "# links"):
             start_reading_links = True
             continue
         if(line[0] == "# Lowest level starting ID"):
@@ -229,9 +229,3 @@ def connect_interAS_gateway(G):
     for AS_Num in G.graph['gateWayList']:
         for pairs in iter.combinations(G.graph['gateWayList'][AS_Num],2):
             G.add_edge(pairs[0],pairs[1])
-           
-
-    
-        
-
-

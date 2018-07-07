@@ -307,7 +307,7 @@ def generate_Connection(Data,layers):
                 s += str(node.ID) + ',' + str(node.x_pos) + ',' + str(node.y_pos) + ',' + str(node.deg) + '\n'
     file.write(s)
     # Writing Links
-    s = "# Links\n"
+    s = "# links\n"
     file.write(s)
     s_connect += "c"
     file.write(s_connect)
