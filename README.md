@@ -125,9 +125,9 @@ G.nodes[i].['InterTable']
 
 # Sample code
 The sample code is located in src/Example.py, you can run the code simply by the following command, its takes around 15s to run
-'''
+```
 python3 Example.py
-'''
+```
 ```python=
 import manager as m
 import networkx as nx
