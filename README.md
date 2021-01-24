@@ -1,12 +1,10 @@
 [TOC]
 # Prerequest
-## Install networkx
+## Install networkx, mcl and cython
 ```
-pip install networkx
-```
-## Install markov_clustering
-```
-pip install markov_clustering
+pip3 install networkx
+pip3 install markov_clustering
+pip3 install cython
 ```
 or download or fork [https://github.com/GuyAllard/markov_clustering](https://)
 ## Clone the project
@@ -126,6 +124,10 @@ G.nodes[i].['InterTable']
 ```
 
 # Sample code
+The sample code is located in src/Example.py, you can run the code simply by the following command, its takes around 15s to run
+'''
+python3 Example.py
+'''
 ```python=
 import manager as m
 import networkx as nx
@@ -153,7 +155,7 @@ def draw_graph_from_csv_example():
     colors = ['r','g','b','y','black','pink','gray']
     color_map = ['black'] * len(G)
     for n in G.nodes():
-        color_map[n] = colors[G.node[n]['AS_N']]
+        color_map[n] = colors[G.nodes[n]['AS_N']]
     nx.draw_networkx(G,node_size = 10,width = 0.2,node_color = color_map,font_size = 5)
     plt.show()
 

@@ -2,26 +2,28 @@ import random
 import numpy as np
 import csv
 import itertools as iter
+import pyximport
+pyximport.install()
 import node_gen as n
 # Author: Henry
 # Node represents a connected device in the internet, ex: router
 class Node:
-    
+
     def __init__(self,ID_Num,x_pos = 0,y_pos = 0):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.deg = 0
-        self.target = []   # stores the nodes that are connected to this node 
+        self.target = []   # stores the nodes that are connected to this node
         self.connected = 0 # If connected is set to 1 means this node is in the graph, else it is out of the graph.
         self.ID = ID_Num # The node's ID
-    
+
     # Calculates distance between two nodes
     # get_distance is written is cython
     def distance(self,other_Node):
         return n.get_distance(self.x_pos,other_Node.x_pos,self.y_pos,other_Node.y_pos)
-        
+
     # Set the target node's connected flag to true, recursively called.
-    # A node being connected means that it is directly or indirectly connected to 
+    # A node being connected means that it is directly or indirectly connected to
     # the layer_1 nodes.
     def net(self):
         for node in self.target:
@@ -71,7 +73,7 @@ class Data:
             if (i != self.Layer_Num):
                 self.connections[str(i) + '-' + str(i + 1) + ',1'] = []
                 self.connections[str(i) + '-' + str(i + 1) + ',2'] = []
-             
+
 # Author: Henry
 # Just a class for the function map_Cordinate_Generator(continent_List)
 class Region:
@@ -95,7 +97,7 @@ def map_Cordinate_Generator(continent_List):
             # All region is a rectangle, defined by four vertex.
             region = Region(int(list[0]),int(list[1]),int(list[2]),int(list[3]))
             Region.Regions.append(region)
-        
+
         for region in Region.Regions:
             Region.sum += region.area # Sum up the Region area
 
@@ -134,15 +136,15 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
     b = initial_box_size
     q = number_of_linear_regression
     (m,n) = image_size
-    
+
     # Build successive box sizes, 1/10 smaller
     sizes = b/(scale**np.arange(0,q,1))
-    
+
     # Extract the positions of image
     image_pos = []
     for i in image:
         image_pos.append([i.x_pos/10 + 1800,i.y_pos/10 + 900])
-    
+
     # Transform the point graph to pxiel image where 1 means existing point
     (px,py) = (int(m/unit), int(n/unit))
     pixel_image = np.zeros((px+1,py+1))
@@ -152,7 +154,7 @@ def dimension_calculation(image, image_size,unit, initial_box_size, number_of_li
         pixel_image[(bx,by)] = 1
     # The positions of pixels at where points exist
     points = np.transpose(np.nonzero(pixel_image))*unit
-    
+
     # Count the number of boxes
     def box_count(image,k): # z is the image and k is the box size
         (nx,ny) = (int(m/k), int(n/k))
@@ -206,15 +208,15 @@ def get_gateway(G):
     for i in range(G.graph['Total_AS']):
         G.graph['gateWayList'][str(i)] = set()
     for e in G.edges():
-        if(G.node[e[0]]['AS_N'] != G.node[e[1]]['AS_N']):
+        if(G.nodes[e[0]]['AS_N'] != G.nodes[e[1]]['AS_N']):
             G.add_node(e[0],isGateway = True)
             G.add_node(e[1],isGateway = True)
-            G.graph['gateWayList'][str(G.node[e[0]]['AS_N'])].add(e[0])
-            G.graph['gateWayList'][str(G.node[e[1]]['AS_N'])].add(e[1])
+            G.graph['gateWayList'][str(G.nodes[e[0]]['AS_N'])].add(e[0])
+            G.graph['gateWayList'][str(G.nodes[e[1]]['AS_N'])].add(e[1])
         else:
-            if((G.node[e[0]].get('isGateway')) == None):
+            if((G.nodes[e[0]].get('isGateway')) == None):
                 G.add_node(e[0],isGateway = False)
-            if((G.node[e[1]].get('isGateway')) == None):
+            if((G.nodes[e[1]].get('isGateway')) == None):
                 G.add_node(e[1],isGateway = False)
     connect_interAS_gateway(G)
 # Author: Henry
