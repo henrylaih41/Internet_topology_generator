@@ -8,7 +8,7 @@ pip3 install cython
 ```
 or download or fork [https://github.com/GuyAllard/markov_clustering](https://)
 ## Clone the project
-Download or fork the project [https://github.com/henrylaih41/BlockChain_Project](https://)
+Download or fork the project [https://github.com/henrylaih41/Internet_topology_generator](https://github.com/henrylaih41/Internet_topology_generator)
 
 
 # Network Topology Generator
